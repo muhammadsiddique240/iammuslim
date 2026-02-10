@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from urllib.parse import urlparse
 
 from dotenv import load_dotenv
 
@@ -77,14 +78,37 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 ASGI_APPLICATION = "config.asgi.application"
 
+def _db_from_url(db_url: str) -> dict:
+    parsed = urlparse(db_url)
+    if parsed.scheme not in {"postgres", "postgresql"}:
+        raise RuntimeError("Unsupported database scheme in DATABASE_URL")
+
+    return {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": (parsed.path or "").lstrip("/"),
+        "USER": parsed.username or "",
+        "PASSWORD": parsed.password or "",
+        "HOST": parsed.hostname or "localhost",
+        "PORT": str(parsed.port or 5432),
+    }
+
+
+_database_url = os.getenv("DATABASE_URL") or os.getenv("DATABASE_PUBLIC_URL")
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": _get_env("POSTGRES_DB", "iammuslim"),
-        "USER": _get_env("POSTGRES_USER", "iammuslim"),
-        "PASSWORD": _get_env("POSTGRES_PASSWORD", ""),
-        "HOST": _get_env("POSTGRES_HOST", "localhost"),
-        "PORT": _get_env("POSTGRES_PORT", "5432"),
+        **(
+            _db_from_url(_database_url)
+            if _database_url
+            else {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": _get_env("POSTGRES_DB", "iammuslim"),
+                "USER": _get_env("POSTGRES_USER", "iammuslim"),
+                "PASSWORD": _get_env("POSTGRES_PASSWORD", ""),
+                "HOST": _get_env("POSTGRES_HOST", "localhost"),
+                "PORT": _get_env("POSTGRES_PORT", "5432"),
+            }
+        ),
     }
 }
 
@@ -111,10 +135,6 @@ MEDIA_URL = os.getenv("DJANGO_MEDIA_URL", "/media/")
 MEDIA_ROOT = Path(os.getenv("DJANGO_MEDIA_ROOT", str(BASE_DIR / "media")))
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# In settings.py
-ADMIN_ONLY_CONTENT = True
-ADMIN_USERS = ['admin', 'superuser']  # 
 
 # Security (production)
 SESSION_COOKIE_SECURE = not DEBUG
