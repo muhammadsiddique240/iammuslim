@@ -19,6 +19,8 @@ RUN pip install --no-cache-dir --timeout=300 --retries=5 -r requirements.txt
 
 COPY . /app/
 
+RUN chmod +x /app/start.sh
+
 RUN adduser --disabled-password --gecos "" appuser \
     && mkdir -p /app/staticfiles /app/media \
     && chown -R appuser:appuser /app
@@ -27,4 +29,4 @@ USER appuser
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 3 --timeout 60"]
+CMD ["sh", "/app/start.sh"]
