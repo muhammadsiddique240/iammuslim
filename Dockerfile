@@ -27,7 +27,7 @@ RUN adduser --disabled-password --gecos "" appuser \
 
 USER appuser
 
-EXPOSE 8080
+EXPOSE 8000
 
 # Force rebuild
 CMD ["sh", "/app/start.sh"]
