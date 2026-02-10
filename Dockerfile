@@ -29,4 +29,5 @@ USER appuser
 
 EXPOSE 8080
 
+# Force rebuild
 CMD ["sh", "/app/start.sh"]
