@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}iammuslim{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Naskh+Arabic:wght@400;600&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'islamic-gold': '#D4AF37',
+            'islamic-green': '#2E7D32',
+            'islamic-blue': '#1A4B8C',
+            'islamic-cream': '#FFF8E7',
+            'islamic-brown': '#8B4513'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root { color-scheme: light; }
+    .font-ar { font-family: 'Noto Naskh Arabic', serif; }
+    .font-ur { font-family: 'Noto Nastaliq Urdu', serif; }
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+  </style>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/islamic-style.css' %}">
+  {% block head %}{% endblock %}
+</head>
+<body class="min-h-full islamic-bg">
+  <div class="content-wrapper">
+    {% include "partials/navbar.html" %}
+
+    <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">
+      {% if messages %}
+        <div class="space-y-2">
+          {% for message in messages %}
+            <div class="rounded-lg border border-islamic-gold bg-white px-4 py-3 text-sm">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="border-t border-islamic-gold bg-white/90 backdrop-blur">
+      <div class="mx-auto max-w-6xl px-4 py-6 text-sm text-slate-600 sm:px-6">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div class="font-semibold text-islamic-green">iammuslim</div>
+          <div>Built with Django ❤️</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <script src="{% static 'js/islamic-ui.js' %}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}{{ paper.title }} | Research | iammuslim{% endblock %}
+
+{% block content %}
+  <!-- Back Navigation -->
+  <div class="mb-6">
+    <a href="{% url 'research:paper_list' %}" 
+       class="inline-flex items-center text-islamic-green hover:text-islamic-blue transition-colors">
+      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+      Back to Research Papers
+    </a>
+  </div>
+
+  <!-- Paper Header -->
+  <div class="mb-8 text-center fade-in-up">
+    <div class="text-sm text-gray-600 mb-2">
+      {{ paper.author }}{% if paper.published_at %} · {{ paper.published_at|date:"F j, Y" }}{% endif %}
+    </div>
+    <h1 class="mb-4 text-3xl font-bold text-islamic-green md:text-4xl">
+      {{ paper.title }}
+    </h1>
+  </div>
+
+  <!-- PDF Viewer -->
+  {% if paper.has_pdf %}
+    <div class="mb-8 fade-in-up" style="animation-delay: 0.2s">
+      {% if paper.has_quranic_content %}
+        <!-- Show Quranic text display for Arabic/Quranic content -->
+        {% include "partials/quranic_text_display.html" with paper=paper %}
+      {% else %}
+        <!-- Show regular PDF viewer for non-Quranic content -->
+        {% include "partials/pdf_viewer.html" with paper=paper %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <!-- Paper Content -->
+  <div class="grid gap-6 lg:grid-cols-3">
+    <!-- Main Content -->
+    <div class="lg:col-span-2 space-y-6">
+      {% if paper.summary %}
+        <div class="bg-white rounded-xl border border-islamic-gold shadow-lg p-6 fade-in-up" style="animation-delay: 0.3s">
+          <h2 class="text-xl font-semibold text-islamic-green mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            Summary
+          </h2>
+          <div class="text-gray-700 leading-relaxed">
+            {{ paper.summary|linebreaksbr }}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if paper.references %}
+        <div class="bg-white rounded-xl border border-islamic-gold shadow-lg p-6 fade-in-up" style="animation-delay: 0.4s">
+          <h2 class="text-xl font-semibold text-islamic-green mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            References
+          </h2>
+          <div class="text-gray-700 leading-relaxed">
+            {{ paper.references|linebreaksbr }}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Sidebar -->
+    <div class="space-y-6">
+      <!-- Quick Actions -->
+      <div class="bg-white rounded-xl border border-islamic-gold shadow-lg p-6 fade-in-up" style="animation-delay: 0.5s">
+        <h3 class="text-lg font-semibold text-islamic-green mb-4">Quick Actions</h3>
+        <div class="space-y-3">
+          {% if paper.has_pdf %}
+            <a href="{{ paper.pdf_url }}" target="_blank" 
+               class="w-full inline-flex items-center justify-center px-4 py-3 bg-islamic-green text-white rounded-lg hover:bg-islamic-blue transition-colors">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              Download PDF
+            </a>
+          {% endif %}
+          
+          <button onclick="sharePaper()" 
+                  class="w-full inline-flex items-center justify-center px-4 py-3 border border-islamic-gold text-islamic-green rounded-lg hover:bg-islamic-cream transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m9.032 4.026a9.001 9.001 0 01-7.432 0m9.032-4.026A9.001 9.001 0 0112 3c-4.474 0-8.268 2.943-9.543 7a9.97 9.97 0 011.827 3.342M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            Share Paper
+          </button>
+        </div>
+      </div>
+
+      <!-- Paper Info -->
+      <div class="bg-white rounded-xl border border-islamic-gold shadow-lg p-6 fade-in-up" style="animation-delay: 0.6s">
+        <h3 class="text-lg font-semibold text-islamic-green mb-4">Paper Information</h3>
+        <div class="space-y-3">
+          <div>
+            <div class="text-sm text-gray-500">Author</div>
+            <div class="font-medium">{{ paper.author }}</div>
+          </div>
+          
+          {% if paper.published_at %}
+            <div>
+              <div class="text-sm text-gray-500">Published</div>
+              <div class="font-medium">{{ paper.published_at|date:"F j, Y" }}</div>
+            </div>
+          {% endif %}
+          
+          {% if paper.has_pdf %}
+            <div>
+              <div class="text-sm text-gray-500">File Type</div>
+              <div class="font-medium">PDF Document</div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function sharePaper() {
+    if (navigator.share) {
+        navigator.share({
+            title: '{{ paper.title|escapejs }}',
+            text: 'Read this research paper by {{ paper.author|escapejs }}',
+            url: window.location.href
+        }).catch(err => console.log('Error sharing:', err));
+    } else {
+        // Fallback: Copy to clipboard
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            alert('Link copied to clipboard!');
+        });
+    }
+}
+</script>
+{% endblock %}

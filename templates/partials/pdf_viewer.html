@@ -1,0 +1,170 @@
+{% load static %}
+<div class="pdf-viewer" data-pdf-id="{{ paper.id }}">
+    <!-- PDF Viewer Header -->
+    <div class="bg-white border border-islamic-gold rounded-t-lg p-4">
+        <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-islamic-green">{{ paper.title }}</h3>
+            <div class="flex gap-2">
+                {% if paper.has_pdf %}
+                    <button onclick="togglePdfView('embed')" class="pdf-view-btn px-3 py-1 text-sm bg-islamic-green text-white rounded hover:bg-islamic-blue transition-colors" data-view="embed">
+                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Embed
+                    </button>
+                    <button onclick="togglePdfView('images')" class="pdf-view-btn px-3 py-1 text-sm bg-islamic-gold text-white rounded hover:bg-islamic-green transition-colors" data-view="images">
+                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        Images
+                    </button>
+                    <a href="{{ paper.pdf_url }}" target="_blank" class="px-3 py-1 text-sm bg-islamic-blue text-white rounded hover:bg-islamic-green transition-colors inline-flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Download
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Viewer Content -->
+    <div class="bg-gray-50 border border-t-0 border-islamic-gold rounded-b-lg">
+        {% if paper.has_pdf %}
+            <!-- Embedded PDF View -->
+            <div id="pdf-embed-view" class="pdf-view-content p-4">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden" style="height: 600px;">
+                    <iframe src="{{ paper.pdf_url }}#view=FitH" 
+                            class="w-full h-full border-0"
+                            title="{{ paper.title }}">
+                        <div class="p-8 text-center">
+                            <p class="text-gray-600 mb-4">Your browser does not support PDF embedding.</p>
+                            <a href="{{ paper.pdf_url }}" target="_blank" class="inline-flex items-center px-4 py-2 bg-islamic-green text-white rounded hover:bg-islamic-blue transition-colors">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                Open PDF in New Tab
+                            </a>
+                        </div>
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Images View -->
+            <div id="pdf-images-view" class="pdf-view-content p-4 hidden">
+                {% if paper.pdf_preview_images %}
+                    <div class="space-y-4">
+                        {% for image_url in paper.pdf_preview_images %}
+                            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                                <div class="p-3 bg-islamic-cream border-b border-islamic-gold">
+                                    <span class="text-sm font-semibold text-islamic-brown">Page {{ forloop.counter }}</span>
+                                </div>
+                                <div class="p-4">
+                                    <img src="{{ image_url }}" 
+                                         alt="Page {{ forloop.counter }} of {{ paper.title }}"
+                                         class="w-full h-auto mx-auto shadow-md rounded"
+                                         loading="lazy">
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-12">
+                        <div class="text-gray-400 mb-4">
+                            <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <p class="text-gray-600 mb-4">PDF preview images are not available.</p>
+                        <p class="text-sm text-gray-500 mb-4">This might be because PDF processing libraries are not installed.</p>
+                        <a href="{{ paper.pdf_url }}" target="_blank" class="inline-flex items-center px-4 py-2 bg-islamic-green text-white rounded hover:bg-islamic-blue transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            View PDF Directly
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        {% else %}
+            <!-- No PDF Available -->
+            <div class="text-center py-12">
+                <div class="text-gray-400 mb-4">
+                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </div>
+                <p class="text-gray-600">No PDF file available for this research paper.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.pdf-viewer {
+    max-width: 100%;
+    margin: 1rem 0;
+}
+
+.pdf-view-content {
+    min-height: 400px;
+}
+
+.pdf-view-btn.active {
+    background-color: var(--islamic-blue) !important;
+}
+
+.pdf-view-btn:not(.active):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .pdf-viewer {
+        margin: 0.5rem 0;
+    }
+    
+    .pdf-view-content {
+        min-height: 300px;
+    }
+    
+    #pdf-embed-view iframe {
+        height: 400px !important;
+    }
+}
+</style>
+
+<script>
+function togglePdfView(viewType) {
+    // Hide all views
+    document.querySelectorAll('.pdf-view-content').forEach(content => {
+        content.classList.add('hidden');
+    });
+    
+    // Remove active class from all buttons
+    document.querySelectorAll('.pdf-view-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected view
+    const selectedView = document.getElementById(`pdf-${viewType}-view`);
+    if (selectedView) {
+        selectedView.classList.remove('hidden');
+    }
+    
+    // Add active class to clicked button
+    const activeBtn = document.querySelector(`[data-view="${viewType}"]`);
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+    }
+}
+
+// Initialize with embed view
+document.addEventListener('DOMContentLoaded', function() {
+    const embedBtn = document.querySelector('[data-view="embed"]');
+    if (embedBtn) {
+        embedBtn.classList.add('active');
+    }
+});
+</script>

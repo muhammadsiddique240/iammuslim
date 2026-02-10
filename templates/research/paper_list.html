@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Research | iammuslim{% endblock %}
+
+{% block content %}
+  <!-- Research Header -->
+  <div class="mb-8 text-center fade-in-up">
+    <h1 class="mb-4 text-3xl font-bold text-islamic-green md:text-4xl">
+      Islamic Research Papers
+    </h1>
+    <p class="mx-auto max-w-2xl text-lg text-gray-600">
+      Scholarly research and analysis by Engineer Muhammad Ali Mirza and other Islamic researchers
+    </p>
+  </div>
+
+  <!-- Research Papers Grid -->
+  {% if page_obj.object_list %}
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {% for paper in page_obj.object_list %}
+        <div class="fade-in-up" style="animation-delay: {{ forloop.counter0 }}0ms">
+          {% include "partials/pdf_card.html" with paper=paper %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-16 bg-white rounded-2xl border border-islamic-gold shadow-lg">
+      <div class="text-gray-400 mb-6">
+        <svg class="w-24 h-24 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+      </div>
+      <h3 class="text-2xl font-semibold text-gray-600 mb-3">No Research Papers Yet</h3>
+      <p class="text-gray-500 mb-8 max-w-md mx-auto">
+        Research papers will be available soon. Check back later or add content through the admin panel.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/admin/research/researchpaper/add/" 
+           class="inline-flex items-center justify-center px-6 py-3 bg-islamic-green text-white rounded-lg hover:bg-islamic-blue transition-colors font-medium">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Add Research Paper
+        </a>
+        <a href="/admin/" 
+           class="inline-flex items-center justify-center px-6 py-3 border border-islamic-gold text-islamic-green rounded-lg hover:bg-islamic-cream transition-colors font-medium">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          Admin Panel
+        </a>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Pagination -->
+  {% if page_obj.has_other_pages %}
+    <div class="mt-12 flex justify-center">
+      <nav class="flex items-center space-x-2">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}" 
+             class="px-4 py-2 text-sm border border-islamic-gold text-islamic-green rounded-lg hover:bg-islamic-cream transition-colors font-medium">
+            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Previous
+          </a>
+        {% endif %}
+        
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <span class="px-4 py-2 text-sm bg-islamic-green text-white rounded-lg font-medium">{{ num }}</span>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?page={{ num }}" 
+               class="px-4 py-2 text-sm border border-islamic-gold text-islamic-green rounded-lg hover:bg-islamic-cream transition-colors font-medium">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}" 
+             class="px-4 py-2 text-sm border border-islamic-gold text-islamic-green rounded-lg hover:bg-islamic-cream transition-colors font-medium">
+            Next
+            <svg class="w-4 h-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        {% endif %}
+      </nav>
+    </div>
+  {% endif %}
+{% endblock %}

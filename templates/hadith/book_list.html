@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Hadith | iammuslim{% endblock %}
+
+{% block content %}
+  <div class="rounded-2xl border border-slate-200 bg-white p-6">
+    <h1 class="text-xl font-semibold">Hadith</h1>
+    <p class="mt-1 text-sm text-slate-600">Books</p>
+
+    <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {% for book in books %}
+        <a class="rounded-xl border border-slate-200 bg-slate-50 p-4 hover:bg-slate-100" href="{% url 'hadith:book_detail' book.slug %}">
+          <div class="text-sm font-medium">{{ book.title }}</div>
+        </a>
+      {% empty %}
+        <div class="text-sm text-slate-600">No books yet. Add content in admin.</div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

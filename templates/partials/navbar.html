@@ -1,0 +1,31 @@
+<header class="sticky top-0 z-20 islamic-header">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+    <a href="{% url 'core:home' %}" class="flex items-center gap-2 font-semibold text-slate-900">
+      <span class="islamic-logo inline-flex h-9 w-9 items-center justify-center rounded-lg text-white">im</span>
+      <span class="text-islamic-green">iammuslim</span>
+    </a>
+
+    <nav class="hidden items-center gap-4 text-sm sm:flex">
+      <a class="text-slate-700 hover:text-islamic-green transition-colors" href="{% url 'quran:surah_list' %}">Quran</a>
+      <a class="text-slate-700 hover:text-islamic-green transition-colors" href="{% url 'hadith:book_list' %}">Hadith</a>
+      <a class="text-slate-700 hover:text-islamic-green transition-colors" href="{% url 'azkar:category_list' %}">Azkar</a>
+      <a class="text-slate-700 hover:text-islamic-green transition-colors" href="{% url 'research:paper_list' %}">Research</a>
+    </nav>
+
+    <form action="{% url 'core:search' %}" method="get" class="w-full max-w-sm">
+      <div class="flex items-center gap-2">
+        <input name="q" value="{{ query|default:'' }}" placeholder="Search Quran, Hadith, Azkar, Research" class="w-full rounded-lg border border-islamic-gold bg-white px-3 py-2 text-sm outline-none ring-islamic-green focus:ring-2" />
+        <button class="rounded-lg bg-gradient-to-r from-islamic-green to-islamic-blue px-3 py-2 text-sm font-medium text-white hover:opacity-90 transition-opacity" type="submit">Search</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="mx-auto max-w-6xl px-4 pb-3 sm:hidden">
+    <div class="grid grid-cols-4 gap-2 text-center text-xs">
+      <a class="rounded-lg border border-islamic-gold bg-white px-2 py-2 text-islamic-green hover:bg-islamic-cream transition-colors" href="{% url 'quran:surah_list' %}">Quran</a>
+      <a class="rounded-lg border border-islamic-gold bg-white px-2 py-2 text-islamic-green hover:bg-islamic-cream transition-colors" href="{% url 'hadith:book_list' %}">Hadith</a>
+      <a class="rounded-lg border border-islamic-gold bg-white px-2 py-2 text-islamic-green hover:bg-islamic-cream transition-colors" href="{% url 'azkar:category_list' %}">Azkar</a>
+      <a class="rounded-lg border border-islamic-gold bg-white px-2 py-2 text-islamic-green hover:bg-islamic-cream transition-colors" href="{% url 'research:paper_list' %}">Research</a>
+    </div>
+  </div>
+</header>

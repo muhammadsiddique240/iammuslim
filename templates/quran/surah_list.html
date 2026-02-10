@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Quran | iammuslim{% endblock %}
+
+{% block content %}
+  <div class="rounded-2xl border border-slate-200 bg-white p-6">
+    <div class="flex items-end justify-between gap-3">
+      <div>
+        <h1 class="text-xl font-semibold">Quran</h1>
+        <p class="mt-1 text-sm text-slate-600">Surah list</p>
+      </div>
+    </div>
+
+    <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {% for surah in surahs %}
+        <a class="rounded-xl border border-slate-200 bg-slate-50 p-4 hover:bg-slate-100" href="{% url 'quran:surah_detail' surah.slug %}">
+          <div class="flex items-center justify-between gap-3">
+            <div class="text-sm font-medium">{{ surah.number }}. {{ surah.name_en|default:surah.name_ar }}</div>
+            <div class="text-xs text-slate-500">{{ surah.ayah_count }} ayahs</div>
+          </div>
+          <div class="mt-2 text-lg font-ar">{{ surah.name_ar }}</div>
+          {% if surah.name_ur %}
+            <div class="mt-2 text-base font-ur">{{ surah.name_ur }}</div>
+          {% endif %}
+        </a>
+      {% empty %}
+        <div class="text-sm text-slate-600">No surahs yet. Add content in admin.</div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
