@@ -136,15 +136,25 @@
 }
 
 /* Enhanced Navigation */
+/* please fixed at the top it was moving with scroller */
 .islamic-header {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-bottom: 2px solid var(--islamic-gold);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
-.islamic-logo {
-  background: linear-gradient(135deg, var(--islamic-green) 0%, var(--islamic-blue) 100%);
-  border-radius: 0.5rem;
+/* Add padding to body to account for fixed header */
+body {
+  /* padding-top: 80px !important; */
+}
+
+/* Main content padding for fixed header */
+main {
+  margin-top: 80px; /* Account for fixed header */
 }
 
 /* Scroll Animations */

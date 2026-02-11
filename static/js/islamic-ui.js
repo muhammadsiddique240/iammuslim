@@ -1,6 +1,7 @@
 // Islamic UI Interactive Features
 document.addEventListener('DOMContentLoaded', function() {
-    // Scroll animations
+    // Scroll animations - temporarily disabled to prevent vibration
+    /*
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.fade-in-up, .slide-in-left, .slide-in-right').forEach(el => {
         observer.observe(el);
     });
+    */
 
     // Quranic Verses Slider
     initVersesSlider();
@@ -111,26 +113,26 @@ function initScholarVideos() {
         {
             name: "Engineer Ali Mirza",
             title: "Islamic Scholar & Engineer",
-            videoUrl: "https://www.youtube.com/embed/your-video-id-1",
-            image: "https://img.youtube.com/vi/your-video-id-1/hqdefault.jpg"
+            videoUrl: "https://www.youtube.com/embed/qMXHTr3qe2E",
+            image: "https://img.youtube.com/vi/qMXHTr3qe2E/hqdefault.jpg"
         },
         {
             name: "Maulana Tariq Jameel",
             title: "Islamic Scholar & Speaker",
-            videoUrl: "https://www.youtube.com/embed/your-video-id-2",
-            image: "https://img.youtube.com/vi/your-video-id-2/hqdefault.jpg"
+            videoUrl: "https://www.youtube.com/embed/1fVp3rK8pLk",
+            image: "https://img.youtube.com/vi/1fVp3rK8pLk/hqdefault.jpg"
         },
         {
             name: "Javed Ahmad Ghamdi",
             title: "Islamic Scholar & Thinker",
-            videoUrl: "https://www.youtube.com/embed/your-video-id-3",
-            image: "https://img.youtube.com/vi/your-video-id-3/hqdefault.jpg"
+            videoUrl: "https://www.youtube.com/embed/9kCg_8mz8wY",
+            image: "https://img.youtube.com/vi/9kCg_8mz8wY/hqdefault.jpg"
         },
         {
             name: "Dr. Israr Ahmed",
             title: "Islamic Scholar & Philosopher",
-            videoUrl: "https://www.youtube.com/embed/your-video-id-4",
-            image: "https://img.youtube.com/vi/your-video-id-4/hqdefault.jpg"
+            videoUrl: "https://www.youtube.com/embed/7Cq7XtSjw9Y",
+            image: "https://img.youtube.com/vi/7Cq7XtSjw9Y/hqdefault.jpg"
         }
     ];
 
@@ -204,11 +206,14 @@ function closeVideoModal() {
 function initParallaxEffect() {
     const islamicBg = document.querySelector('.islamic-bg');
     if (islamicBg) {
+        // Temporarily disabled parallax effect
+        /*
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
             const parallax = scrolled * 0.5;
             islamicBg.style.transform = `translateY(${parallax}px)`;
         });
+        */
     }
 }
 
